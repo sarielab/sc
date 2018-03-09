@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { Redirect } from 'react-router'
 
 import { fetchWeight, deleteWeight } from '../redux/actions/weight'
 import { Table } from '../components'
@@ -12,20 +13,20 @@ class WeightList extends React.Component {
     super(props)
     this.props.fetchWeight()
 
-    this.handleInsert = this.handleInsert.bind(this)
+    this.state = {
+      toUpdate: ''
+    }
     this.handleFunction = {
       'update': this.handleUpdate.bind(this),
       'delete': this.handleDelete.bind(this)
     }
   }
-  handleInsert() {
-    alert('insert ')
-  }
-  handleUpdate(action) {
-    alert('update '+action)
-  }
-  handleEdit(key) {
-    alert('edit '+key)
+
+  handleUpdate(key) {
+    this.setState({toUpdate: (<Redirect to={{pathname:`/weight-form/${key}`}}/>)})
+
+
+    console.log(<Redirect to={{pathname:`/weight-form/${key}`}}/>)
   }
   handleDelete(id) {
     let confirm = window.confirm('Are you sure to delete? ')
@@ -37,6 +38,7 @@ class WeightList extends React.Component {
 
     return(
       <div>
+        { this.state.toUpdate }
         <Link to="/weight-form"><button>+ Add New Weight</button></Link>
         { isFetching && <h4>Fetching Weight Data</h4>}
         { !isFetching && weights.length === 0 && <h4>No Data</h4>}

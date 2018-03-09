@@ -7,37 +7,41 @@ import { Redirect } from 'react-router'
 import FormItem from './core/formItem'
 import { fetchOneWeight, addWeight, updateWeight } from '../redux/actions/weight'
 
-const initialForm = {
+const initialState = {
   max: 0,
   min: 0,
   date: '',
   _id: '',
-  isSubmitted: false
+  is_submitted: false
 }
 
 class WeightForm extends React.Component{
   constructor(props) {
     super(props)
-
+    this.state = initialState
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
 
-    //cek baru ato lama
-    //jika lama maka get data
-    this.setWeight()
-  }
-
-  setWeight() {
-    if (typeof this.props.match.params.id === 'undefined') this.state = initialForm
-    else {
-      let id = `${this.props.match.params.id}`
+    if (typeof props !== 'undefined') {
+      let id = `${props.match.params.id}`
+      alert(id)
       this.setState({_id: id})
-      this.props.fetchOneWeight(id)
+      props.fetchOneWeight(`${id}`)
+
     }
   }
 
   componentWillUnmount () {
-    this.setState({ isSubmited: false })
+    this.setState({ is_submitted: false })
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.weight!==this.props.weight)
+      this.setState({
+        min: nextProps.weight.min,
+        max: nextProps.weight.max,
+        date: nextProps.weight.date
+      })
   }
 
   handleChange(e) {
@@ -55,13 +59,13 @@ class WeightForm extends React.Component{
     if (this.state._id === '') this.props.addWeight(weight)
     else this.props.updateWeight(this.state._id, weight)
 
-    this.setState({isSubmitted: true})
+    this.setState({is_submitted: true})
   }
 
   render() {
     return (
       <div>
-        { (this.state.isSubmitted && this.props.isUpdated) && <Redirect to={{pathname:'/weight'}}/>}
+        { (this.state.is_submitted && this.props.isUpdated) && <Redirect to={{pathname:'/weight'}}/>}
 
         <form onSubmit={this.handleSubmit}>
           <FormItem type="number" name="max" label="Max" value={this.state.max} handleChange={this.handleChange} />
@@ -76,6 +80,7 @@ class WeightForm extends React.Component{
 
 const mapStateToProps = (state) => {
   return {
+    weight: state.weightData.weight,
     isUpdated: state.weightData.isUpdated,
     isUpdating: state.weightData.isUpdating,
     updateError: state.weightData.updateError,
