@@ -10,7 +10,8 @@ class Weight extends React.Component {
       <div>
         <Route exact path="/weight/:id" component={WeightDetail}/>
         <Route exact path="/weight" component={WeightList}/>
-        <Route path="/add-weight" component={WeightForm}/>
+        <Route exact path="/weight-form" component={WeightForm}/>
+        <Route exact path="/weight-form/:id" component={WeightForm}/>
       </div>
     </BrowserRouter>
     )

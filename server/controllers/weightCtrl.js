@@ -18,7 +18,12 @@ const create = (req, res) => {
     if (err) {
       res.header(500)
       res.send({err:err})
-    } else res.send(s_weight)
+    } else res.send({
+      date: s_weight.date,
+      max: s_weight.max,
+      min: s_weight.min,
+      variance: s_weight.variance,
+    })
   })
 }
 const update = (req, res) => {

@@ -37,7 +37,7 @@ class WeightList extends React.Component {
 
     return(
       <div>
-        <Link to="/add-weight"><button>+ Add New Weight</button></Link>
+        <Link to="/weight-form"><button>+ Add New Weight</button></Link>
         { isFetching && <h4>Fetching Weight Data</h4>}
         { !isFetching && weights.length === 0 && <h4>No Data</h4>}
         { !fetchError &&
