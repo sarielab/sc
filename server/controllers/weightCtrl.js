@@ -64,6 +64,7 @@ const remove = (req, res) => {
 const getOne = (req, res) => {
   Weight
     .findById(req.params.id)
+    .select('date max min variance')
     .exec((err, weight) => {
       if (err) {
         res.header(500)
